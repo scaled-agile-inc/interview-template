@@ -1,11 +1,10 @@
-import { FastifyPluginAsync } from "fastify";
+import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 
 export const autoPrefix = "/posts";
 
-const posts: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  // get all posts with schema validation
-  // get all posts for a user
-  // get a single post
-};
+const posts: FastifyPluginAsyncTypebox = async (
+  fastify,
+  opts,
+): Promise<void> => {};
 
 export default posts;
