@@ -6,7 +6,13 @@ import { getPostByAuthorId, getPostById, getPosts, Post } from "../data/posts";
 // to export the decorators to the outer scope
 export default fp(async (fastify, opts) => {
   fastify.decorate("posts", {
-    findMany: async (cursor?: number, authorId?: number) => {
+    findMany: async ({
+      cursor,
+      authorId,
+    }: {
+      cursor?: number;
+      authorId?: number;
+    }) => {
       if (authorId) {
         return await getPostByAuthorId(authorId);
       }
@@ -22,7 +28,13 @@ export default fp(async (fastify, opts) => {
 declare module "fastify" {
   export interface FastifyInstance {
     posts: {
-      findMany(cursor?: number, authorId?: number): Promise<Post[]>;
+      findMany({
+        cursor,
+        authorId,
+      }: {
+        cursor?: number;
+        authorId?: number;
+      }): Promise<Post[]>;
       findUnique({ id }: { id: number }): Promise<Post | undefined>;
     };
   }

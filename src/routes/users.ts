@@ -22,8 +22,8 @@ const users: FastifyPluginAsyncTypebox = async (
       },
     },
     async function (request, reply) {
-      // implement cursor
-      return fastify.users.findMany();
+      const { cursor } = request.query;
+      return await fastify.users.findMany({ cursor });
     },
   );
 
@@ -36,10 +36,24 @@ const users: FastifyPluginAsyncTypebox = async (
       },
     },
     async function (request, reply) {
-      const { id } = request.params;
+      // please implement this RESTful route handler function
+      return reply.notImplemented(`Please implement`);
+    },
+  );
 
-      // place code here
-      return reply.notImplemented(`use the ${id}`);
+  fastify.get(
+    "/top",
+    {
+      schema: {
+        response: {
+          200: Type.Array(
+            Type.Intersect([User, Type.Object({ totalLikes: Type.Number() })]),
+          ),
+        },
+      },
+    },
+    async function (request, reply) {
+      return await fastify.users.findMostLiked();
     },
   );
 };

@@ -1,15 +1,18 @@
 import fp from "fastify-plugin";
-import { getUserById, getUsers, User } from "../data/users";
+import { getTopAuthors, getUserById, getUsers, User } from "../data/users";
 
 // The use of fastify-plugin is required to be able
 // to export the decorators to the outer scope
 export default fp(async (fastify, opts) => {
   fastify.decorate("users", {
-    findMany: async (cursor) => {
+    findMany: async ({ cursor }) => {
       return await getUsers(cursor);
     },
     findUnique: async (id) => {
       return await getUserById(id);
+    },
+    findMostLiked: async () => {
+      return await getTopAuthors();
     },
   });
 });
@@ -18,8 +21,9 @@ export default fp(async (fastify, opts) => {
 declare module "fastify" {
   export interface FastifyInstance {
     users: {
-      findMany(cursor?: number): Promise<User[]>;
+      findMany({ cursor }: { cursor?: number }): Promise<User[]>;
       findUnique(id: number): Promise<User | undefined>;
+      findMostLiked(): Promise<Array<User & { totalLikes: number }>>;
     };
   }
 }
